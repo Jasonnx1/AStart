@@ -113,6 +113,15 @@ abstract class Matrix {
     cells.get(j).get(i).setFillColor(c);
   }
   
+  void update (float delta) {
+    for (int j = 0; j < rows; j++) {
+      for (int i = 0; i < cols; i++) {
+        cells.get(j).get(i).update(delta);
+      }
+    }
+  }
+  
+  // Met à jour les couleurs des cellules
   void update (String data) {
     String rawData[] = data.split(" ");
     
@@ -145,6 +154,7 @@ abstract class Matrix {
     }
   }
   
+  // Met à jour les couleurs des cellules
   void update (byte [] data) {
     int nbValues = data.length;
     

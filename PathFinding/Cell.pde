@@ -15,9 +15,14 @@ class Cell {
   
   color fillColor;
   
+  int pulseInterval = 0;
+  int pulseAcc = 0;
+  
+  float alphaInc = 0;
+  int currentAlpha = 255;
+  
   Cell (int _x, int _y) {
     init (_x, _y, 50, 50);
-
   }
   
   Cell (int _x, int _y, int _w, int _h) {
@@ -36,6 +41,17 @@ class Cell {
   
   void setFillColor (color c) {
     fillColor = c;
+    memFillColor = c; 
+  }
+    
+  void setPulseInterval (int interval) {
+    pulseInterval = interval;
+    
+    if (pulseInterval > 0) {
+      alphaInc = (pulseInterval * 1.0) / 256.0;
+    } else {
+      alphaInc = 0;
+    }
   }
   
   // Retourne un string avec la couleur RGB en format "R G B"
@@ -55,11 +71,18 @@ class Cell {
   // Permet d'afficher la cellule
   void display () {
     pushMatrix();
-    translate (x, y);
-    fill (fillColor);
-    stroke (0);
-    rect (0, 0, w, h);
+      translate (x, y);
+      fill (fillColor);
+      alpha(currentAlpha);
+      stroke (0);
+      rect (0, 0, w, h);
     popMatrix();
+  }
+  
+  color memFillColor; 
+  
+  void update(float delta) {
+ //<>//
   }
   
 }

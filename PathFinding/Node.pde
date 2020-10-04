@@ -24,7 +24,8 @@ class Node extends Cell {
   
   Node (int _x, int _y, int _w, int _h) {
     super (_x, _y, _w, _h);
-    
+    G = 100000000;
+    H = 0;
     movementCost = 10;
   }
   

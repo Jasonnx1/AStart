@@ -16,6 +16,10 @@ class NodeMap extends Matrix {
   Node start;
   Node end;
   
+  ArrayList<Node> openList;
+  ArrayList<Node> closedList;  
+  Node currentNode;
+  
   ArrayList <Node> path;
   
   boolean debug = false;
@@ -156,6 +160,9 @@ class NodeMap extends Matrix {
   
   /**
     Génère les voisins de chaque Noeud
+    Pas la méthode la plus efficace car ça
+    prend beaucoup de mémoire.
+    Idéalement, on devrait le faire au besoin
   */
   void generateNeighbourhood() {
     for (int j = 0; j < rows; j++) {
@@ -171,17 +178,82 @@ class NodeMap extends Matrix {
     deux cellules
   */
   void findAStarPath () {
-    // TODO : Complétez ce code
-    
     if (start == null || end == null) {
       println ("No start and no end defined!");
       return;
     }
-    
-    // TODO : Complétez ce code
-    
-    // Appelez generatePath si le chemin est t
-    // TODO : Complétez ce code
+    else
+    {
+      
+      
+       currentNode = start; 
+       openList = new ArrayList<Node>();
+       closedList = new ArrayList<Node>();         
+       openList.add(start);
+       start.G = 0;
+      
+      while(openList.size() > 0)
+      {
+ 
+        currentNode = getLowestCost(openList);
+        
+        if(currentNode == end)
+        {          
+         openList.clear();
+        }
+        else
+        {
+          
+          openList.remove(currentNode);
+          closedList.add(currentNode);
+          
+          if(currentNode != null)
+          {
+            for(Node n : currentNode.neighbours)
+            {               
+              
+                n.setMovementCost(calculateCost(currentNode, n)); 
+              
+               if(!(closedList.contains(n)))
+               {
+                
+                 if(n.isWalkable)
+                 {
+                   int Gprime = currentNode.getG() + n.movementCost; 
+                   
+                   if(Gprime >= n.getG())
+                   {
+                       
+                   }                 
+                   else
+                   {
+                     if(!openList.contains(n))
+                     {
+                       openList.add(n);
+                     }
+                  
+                       n.setParent(currentNode);
+                       n.G = Gprime;
+                     
+                       
+                   }
+                                   
+                 }              
+             }
+              
+           }
+          }
+          else
+          {            
+            openList.clear();
+          }
+   
+        }
+
+      }
+               
+               generatePath();
+    }
     
   }
   
@@ -189,7 +261,24 @@ class NodeMap extends Matrix {
     Permet de générer le chemin une fois trouvée
   */
   void generatePath () {
-    // TODO : Complétez ce code
+    path = new ArrayList<Node>();
+    boolean done = false;
+    Node v = end.getParent();
+    
+    try
+    {
+          while(!done)
+          {      
+                path.add(v);
+                if(v.getParent() != start)  {
+                  v = v.getParent();
+                } else {
+                  done = true;
+                }
+          }
+    } catch(Exception e){print(e);};
+    
+
   }
   
   /**
@@ -197,9 +286,30 @@ class NodeMap extends Matrix {
   * @return Node le moins couteux de la liste ouverte
   */
   private Node getLowestCost(ArrayList<Node> openList) {
-    // TODO : Complétez ce code
     
-    return null;
+    Node result = null;
+    
+    for(Node n : openList)
+    {
+        if(n.isWalkable == true)
+        {
+            if(result == null)
+            {
+              result = n;         
+            }
+            else
+            {             
+              if(n.getF() < result.getF())
+              {
+                result = n;
+              }
+              
+            }
+            
+        }
+    }
+    
+    return result;
   }
   
 
@@ -211,10 +321,20 @@ class NodeMap extends Matrix {
   * @return
   */
   private int calculateCost(Cell nodeA, Cell nodeB) {
-    // TODO : Complétez ce code
-    
-    return 0;
+    int cost = 14;
+      
+    if(nodeA.x == nodeB.x)
+    {
+      cost = 10; 
+    }    
+    else if(nodeA.y == nodeB.y)
+    {
+      cost = 10;
+    }
+
+    return cost;
   }
+  
   
   /**
   * Calcule l'heuristique entre le noeud donnée et le noeud finale
@@ -222,8 +342,33 @@ class NodeMap extends Matrix {
   * @return la valeur H
   */
   private int calculateH(Cell node) {
-    // TODO : Complétez ce code
-    return 0;
+        int H = 0;
+    
+    if(node.i > end.i)
+    {
+      
+      H += node.i - end.i;
+      
+    }
+    else
+    {
+     H += end.i - node.i; 
+    }
+    
+    if(node.j > end.j)
+    {
+      
+      H += node.j - end.j;
+      
+    }
+    else
+    {
+     H += end.j - node.j; 
+    }
+    
+    H *= 10;
+    
+    return H;
   }
   
   String toStringFGH() {
