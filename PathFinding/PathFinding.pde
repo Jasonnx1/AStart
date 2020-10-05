@@ -44,19 +44,8 @@ void initMap () {
   worldMap = new NodeMap (mapRows, mapCols); 
   
   
-  
+  makeMap();
   worldMap.setBaseColor(baseColor);
-  worldMap.makeWall(mapCols/2, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+1, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+2, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+3, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+4, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+5, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+6, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+7, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+8, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+9, mapRows/4, 40, true);
-  worldMap.makeWall(mapCols/2+10, mapRows/4, 40, true);
   
   
  /*
@@ -74,6 +63,9 @@ void initMap () {
     
   }
   
+  makeMap();
+
+  
   
   // Mise à jour de tous les H des cellules
   worldMap.updateHs();
@@ -83,6 +75,22 @@ void initMap () {
   worldMap.generateNeighbourhood(); //<>//
       
   worldMap.findAStarPath();
+}
+
+void makeMap()
+{
+  
+  
+  
+  worldMap.makeWall(mapCols/2, mapRows/4, 40, true);
+  worldMap.makeWall(mapCols/2+1, mapRows/4, 40, false);
+  worldMap.makeWall(mapCols/2-10, mapRows/4, 10, true);
+  worldMap.makeWall(mapCols/2-8, mapRows/4, 10, true);
+  
+   worldMap.makeWall(mapCols/2, mapRows/2, 10, false);
+   worldMap.makeWall(mapCols/2, mapRows/2, 10, false);
+
+  
 }
 
 void keyPressed()
